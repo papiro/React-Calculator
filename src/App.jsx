@@ -33,16 +33,22 @@ class CalculatorDisplay extends Component {
 
   wonClick(values) {
     if (typeof values === 'number') {
-      this.setState({
-        kNum: this.state.kNum.concat([values]),
-        lastNum: this.state.lastNum.concat([values]),
-        displayVal: this.state.displayVal.concat([values])
-      })
+      this.setState(state => ({
+        kNum: state.kNum.concat([values]),
+        lastNum: state.lastNum.concat([values]),
+        displayVal: state.displayVal.concat([values])
+      }))
       // alert(this.state.kNum)
     } else {
-      this.setState({ operator: values, displayVal: this.state.displayVal.concat([values]), addition: this.state.kNum });
+      this.setState(state => ({
+        operator: values,
+        displayVal: state.displayVal.concat([values]),
+        addition: state.kNum
+      }));
       //alert(this.state.kNum + "this is kNum")
-      this.state.kNum = [];
+      this.setState({
+        kNum: []
+      })
     }
   };
 
@@ -70,56 +76,81 @@ class CalculatorDisplay extends Component {
 
     if (this.state.operator === "+") {
       if (true) {
-        this.state.addition2 = this.state.kNum
-        this.state.answer = Number(this.state.addition.join("")) + Number(this.state.addition2.join(""))
+        this.setState(state => ({
+          addition2: state.kNum,
+          answer: Number(state.addition.join("")) + Number(state.addition2.join(""))
+        }))
       } else {
-        this.state.answer = Number(this.state.addition.join("")) + Number(this.state.addition2.join(""))
+        this.setState(state => ({
+          answer: Number(state.addition.join("")) + Number(state.addition2.join(""))
+        }))
       }
-      this.state.lastNum = this.state.answer
+      this.setState(state => ({
+        lastNum: state.answer
+      }))
     }
 
 
     if (this.state.operator === "-") {
       if (true) {
-        this.state.addition2 = this.state.kNum
-        this.state.answer = Number(this.state.addition.join("")) - Number(this.state.addition2.join(""))
+        this.setState(state => ({
+          addition2: state.kNum,
+          answer: Number(state.addition.join("")) - Number(state.addition2.join(""))
+        }))
       } else {
-        this.state.answer = Number(this.state.addition.join("")) - Number(this.state.addition2.join(""))
+        this.setState(state => ({
+          answer: Number(state.addition.join("")) - Number(state.addition2.join(""))
+        }))
       }
-      this.state.lastNum = this.state.answer
+      this.setState(state => ({
+        lastNum: state.answer
+      }))
     }
 
 
     if (this.state.operator === "/") {
       if (true) {
-        this.state.addition2 = this.state.kNum
-        this.state.answer = Number(this.state.addition.join("")) / Number(this.state.addition2.join(""))
+        this.setState(state => ({
+          addition2: state.kNum,
+          answer: Number(state.addition.join("")) / Number(state.addition2.join(""))
+        }))
       } else {
-        this.state.answer = Number(this.state.addition.join("")) / Number(this.state.addition2.join(""))
-      } this.state.lastNum = this.state.answer
+        this.setState(state => ({
+          answer: Number(state.addition.join("")) / Number(state.addition2.join(""))
+        }))
+      }
+      this.setState(state => ({
+        lastNum: state.answer
+      }))
     }
 
 
     if (this.state.operator === "x") {
       if (true) {
-        this.state.addition2 = this.state.kNum
-        this.state.answer = Number(this.state.addition.join("")) * Number(this.state.addition2.join(""))
+        this.setState(state => ({
+          addition2: state.kNum,
+          answer: Number(state.addition.join("")) * Number(state.addition2.join(""))
+        }))
       } else {
-        this.state.answer = Number(this.state.addition.join("")) * Number(this.state.addition2.join(""))
-      } this.state.lastNum = this.state.answer
+        this.setState(state => ({
+          answer: Number(state.addition.join("")) * Number(state.addition2.join(""))
+        }))
+      }
+      this.setState(state => ({
+        lastNum: state.answer
+      }))
     }
 
-    this.setState({
-      addition2: Number(this.state.kNum.join("")),
-      displayVal: this.state.answer,
+    this.setState(state => ({
+      addition2: Number(state.kNum.join("")),
+      displayVal: state.answer,
       kNum: [],
-    });
+    }));
   };
   isEqual = true
 
 
   render() {
-
     return (
       <div>
         <div className="calculator__display">{this.state.displayVal}</div>
