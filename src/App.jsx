@@ -68,7 +68,7 @@ class CalculatorDisplay extends Component {
 
   numEquals() {
 
-    if (this.state.operator == "+") {
+    if (this.state.operator === "+") {
       if (true) {
         this.state.addition2 = this.state.kNum
         this.state.answer = Number(this.state.addition.join("")) + Number(this.state.addition2.join(""))
@@ -79,7 +79,7 @@ class CalculatorDisplay extends Component {
     }
 
 
-    if (this.state.operator == "-") {
+    if (this.state.operator === "-") {
       if (true) {
         this.state.addition2 = this.state.kNum
         this.state.answer = Number(this.state.addition.join("")) - Number(this.state.addition2.join(""))
@@ -90,7 +90,7 @@ class CalculatorDisplay extends Component {
     }
 
 
-    if (this.state.operator == "/") {
+    if (this.state.operator === "/") {
       if (true) {
         this.state.addition2 = this.state.kNum
         this.state.answer = Number(this.state.addition.join("")) / Number(this.state.addition2.join(""))
@@ -100,7 +100,7 @@ class CalculatorDisplay extends Component {
     }
 
 
-    if (this.state.operator == "x") {
+    if (this.state.operator === "x") {
       if (true) {
         this.state.addition2 = this.state.kNum
         this.state.answer = Number(this.state.addition.join("")) * Number(this.state.addition2.join(""))
