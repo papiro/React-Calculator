@@ -23,183 +23,111 @@ class CalculatorDisplay extends Component {
     this.state = {
       kNum: [],
       addition: [],
-      addition2: [],
-      lastNum: [],
       answer: 0,
       operator: " ",
       displayVal: []
     };
   };
 
-  wonClick(values) {
-    if (typeof values === 'number') {
+  wonClick(value) {
+    if (typeof value === 'number') {
       this.setState(state => ({
-        kNum: state.kNum.concat([values]),
-        lastNum: state.lastNum.concat([values]),
-        displayVal: state.displayVal.concat([values])
+        kNum: state.kNum.concat([value]),
+        displayVal: state.displayVal.concat([value])
       }))
       // alert(this.state.kNum)
     } else {
       this.setState(state => ({
-        operator: values,
-        displayVal: state.displayVal.concat([values]),
-        addition: state.kNum
-      }));
-      //alert(this.state.kNum + "this is kNum")
-      this.setState({
+        operator: value,
+        displayVal: state.displayVal.concat([value]),
+        addition: state.kNum,
         kNum: []
-      })
+      }));
     }
   };
 
-  /*joinNum(values){
-  this.setState({
-  addition:Number(this.state.kNum.join([values])),
-  kNum:[],
-  })
-  };*/
-
-
-  clrBtn(values) {
+  clrBtn() {
     this.setState({
-      kNum: [values],
+      kNum: [],
       displayVal: [],
-      lastNum: [],
       addition: 0,
-      addition2: 0,
       answer: 0,
-      isEqual: false
     })
   };
 
   numEquals() {
-
-    if (this.state.operator === "+") {
-      if (true) {
-        this.setState(state => ({
-          addition2: state.kNum,
-          answer: Number(state.addition.join("")) + Number(state.addition2.join(""))
-        }))
-      } else {
-        this.setState(state => ({
-          answer: Number(state.addition.join("")) + Number(state.addition2.join(""))
-        }))
-      }
-      this.setState(state => ({
-        lastNum: state.answer
-      }))
-    }
-
-
-    if (this.state.operator === "-") {
-      if (true) {
-        this.setState(state => ({
-          addition2: state.kNum,
-          answer: Number(state.addition.join("")) - Number(state.addition2.join(""))
-        }))
-      } else {
-        this.setState(state => ({
-          answer: Number(state.addition.join("")) - Number(state.addition2.join(""))
-        }))
-      }
-      this.setState(state => ({
-        lastNum: state.answer
-      }))
-    }
-
-
-    if (this.state.operator === "/") {
-      if (true) {
-        this.setState(state => ({
-          addition2: state.kNum,
-          answer: Number(state.addition.join("")) / Number(state.addition2.join(""))
-        }))
-      } else {
-        this.setState(state => ({
-          answer: Number(state.addition.join("")) / Number(state.addition2.join(""))
-        }))
-      }
-      this.setState(state => ({
-        lastNum: state.answer
-      }))
-    }
-
-
-    if (this.state.operator === "x") {
-      if (true) {
-        this.setState(state => ({
-          addition2: state.kNum,
-          answer: Number(state.addition.join("")) * Number(state.addition2.join(""))
-        }))
-      } else {
-        this.setState(state => ({
-          answer: Number(state.addition.join("")) * Number(state.addition2.join(""))
-        }))
-      }
-      this.setState(state => ({
-        lastNum: state.answer
-      }))
+    let answer;
+    const num1 = Number(this.state.addition.join(""))
+    const num2 = Number(this.state.kNum.join(""))
+    switch (this.state.operator) {
+      case '+':
+        answer = num1 + num2
+        break;
+      case '-':
+        answer = num1 - num2
+        break;
+      case '/':
+        answer = num1 / num2
+        break;
+      case 'x':
+        answer = num1 * num2
+        break;
+      default:
+      // do nothing
     }
 
     this.setState(state => ({
-      addition2: Number(state.kNum.join("")),
-      displayVal: state.answer,
+      displayVal: answer,
       kNum: [],
     }));
   };
-  isEqual = true
-
 
   render() {
     return (
       <div>
         <div className="calculator__display">{this.state.displayVal}</div>
-        <CalculatorKeys sonClick={this.wonClick.bind(this)} numEquals={this.numEquals.bind(this)} clrBtn={this.clrBtn.bind(this)} />
+        <CalculatorKeys
+          sonClick={this.wonClick.bind(this)}
+          numEquals={this.numEquals.bind(this)}
+          clrBtn={this.clrBtn.bind(this)}
+        />
       </div>
     )
   };
 };
 
+const withOnClick = (onClick, Component) => (props) => (
+  <Component onClick={onClick} {...props} />
+)
+
+const _OperatorKey = ({ operator, onClick }) => (
+  <button onClick={() => onClick(operator)} className="key--operator">{operator}</button>
+)
+
+const _NumberKey = ({ numberWord, number, onClick }) => (
+  <button onClick={() => onClick(number)} className={numberWord}>{number}</button>
+)
 
 class CalculatorKeys extends Component {
   render() {
+    const { sonClick, clrBtn, numEquals } = this.props;
+    const OperatorKey = withOnClick(sonClick, _OperatorKey)
+    const NumberKey = withOnClick(sonClick, _NumberKey)
 
     return (
       <div className="calculator__keys">
+        {['+', '-', 'x', '/'].map(operator => <OperatorKey operator={operator} key={operator} />)}
+        <button onClick={() => numEquals()} className="key--equal">=</button>
 
-        <button onClick={() => this.props.sonClick('+')} className="key--operator" id="adds" data-action="add">+</button>
+        {[[7, 'seven'], [8, 'eight'], [9, 'nine'],
+        [4, 'four'], [5, 'five'], [6, 'six'],
+        [1, 'one'], [2, 'two'], [3, 'three'],
+        [0, 'zero']
+        ].map(([number, numberWord]) => <NumberKey numberWord={numberWord} number={number} key={number} />)}
 
-        <button onClick={() => this.props.sonClick('-')} className="key--operator" id="subtracts" data-action="subtract">-</button>
+        <button onClick={() => sonClick('.')}>.</button>
 
-        <button onClick={() => this.props.sonClick('x')} className="key--operator" id="multiplies" data-action="multiply">&times;</button>
-
-        <button onClick={() => this.props.sonClick('/')} className="key--operator" id="divides" data-action="divide">/</button>
-
-        <button onClick={() => this.props.numEquals()} className="key--equal" id="equals" data-action="calculate">=</button>
-
-        <button onClick={() => this.props.sonClick(7)} className="seven"> 7</button>
-
-        <button onClick={() => this.props.sonClick(8)} className="eight">8</button>
-
-        <button onClick={() => this.props.sonClick(9)} className="nine">9</button>
-
-        <button onClick={() => this.props.sonClick(4)} className="four">4</button>
-
-        <button onClick={() => this.props.sonClick(5)} className="five">5</button>
-
-        <button onClick={() => this.props.sonClick(6)} className="six">6</button>
-
-        <button onClick={() => this.props.sonClick(1)} className="one">1</button>
-
-        <button onClick={() => this.props.sonClick(2)} className="two">2</button>
-
-        <button onClick={() => this.props.sonClick(3)} className="three">3</button>
-
-        <button onClick={() => this.props.sonClick(0)} className="zero">0</button>
-
-        <button onClick={() => this.props.sonClick('.')} id="decimals" data-action="decimal">.</button>
-
-        <button onClick={() => this.props.clrBtn(0)} id="clears" data-action="clear">AC</button>
+        <button onClick={() => clrBtn()}>AC</button>
       </div>
 
     )
